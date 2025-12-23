@@ -1,0 +1,73 @@
+# ==================== IDE ====================
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.sublime-*
+
+# ==================== Maven ====================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ==================== Gradle (if used) ====================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ==================== Java ====================
+*.class
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+# ==================== Spring Boot ====================
+*.log.*
+application-local.yml
+application-local.properties
+
+# ==================== Node.js (for micro-frontends) ====================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+dist/
+.next/
+out/
+
+# ==================== Environment Files ====================
+.env
+.env.local
+.env.*.local
+*.env
+
+# ==================== OS Files ====================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==================== Docker ====================
+# Don't ignore docker-compose files, but ignore local overrides
+docker-compose.override.yml
+docker-compose.local.yml
+
+# ==================== Secrets (NEVER COMMIT) ====================
+**/secrets/
+**/credentials/
+*.pem
+*.key
+*.crt

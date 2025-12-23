@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: eureka-server
+  
+  config:
+    import: optional:configserver:http://config_admin:config_secret_2024@localhost:8888
+
+# Fallback configuration (used if Config Server is not available)
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    # Eureka server should not register with itself
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  server:
+    # Disable self-preservation mode in development
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 5000
+
+# Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always

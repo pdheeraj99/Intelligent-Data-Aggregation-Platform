@@ -1,0 +1,136 @@
+﻿mvnd : Dec 23, 2025 9:20:48 PM org.jline.utils.Log logr
+At line:1 char:1
++ mvnd clean compile 2>&1 | Out-File -FilePath build-output.txt 
+-Encodi ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Dec 23, 2025 9:....ut 
+   ils.Log logr:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: Unable to create a system terminal, creating a dumb 
+terminal (enable debug logging for more information)
+[main] WARNING org.jline - Unable to create a system terminal, 
+creating a dumb terminal (enable debug logging for more 
+information)
+[INFO] Processing build on daemon ee825ffd
+[INFO] Scanning for projects...
+[INFO] BuildTimeEventSpy is registered.
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Intelligent Data Aggregation Platform                              [pom]
+[INFO] IDAP Config Server                                                 [jar]
+[INFO] IDAP Eureka Server                                                 [jar]
+[INFO] IDAP API Gateway                                                   [jar]
+[INFO] IDAP User Service                                                  [jar]
+[INFO] IDAP Weather Service                                               [jar]
+[INFO] 
+[INFO] Using the SmartBuilder implementation with a thread count of 15
+[intelligent-data-aggregation-platform] [INFO] 
+[intelligent-data-aggregation-platform] [INFO] -----------< com.idap:intelligent-data-aggregation-platform >-----------
+[intelligent-data-aggregation-platform] [INFO] Building Intelligent Data Aggregation Platform 1.0.0-SNAPSHOT      [1/6]
+[intelligent-data-aggregation-platform] [INFO]   from pom.xml
+[intelligent-data-aggregation-platform] [INFO] --------------------------------[ pom ]---------------------------------
+[intelligent-data-aggregation-platform] [INFO] 
+[intelligent-data-aggregation-platform] [INFO] --- clean:3.3.2:clean (default-clean) @ intelligent-data-aggregation-platform ---
+[weather-service] [INFO] 
+[user-service] [INFO] 
+[weather-service] [INFO] ----------------------< com.idap:weather-service >----------------------
+[user-service] [INFO] -----------------------< com.idap:user-service >------------------------
+[weather-service] [INFO] Building IDAP Weather Service 1.0.0-SNAPSHOT                       [2/6]
+[user-service] [INFO] Building IDAP User Service 1.0.0-SNAPSHOT                          [3/6]
+[weather-service] [INFO]   from weather-service\pom.xml
+[user-service] [INFO]   from user-service\pom.xml
+[weather-service] [INFO] --------------------------------[ jar ]---------------------------------
+[eureka-server] [INFO] 
+[user-service] [INFO] --------------------------------[ jar ]---------------------------------
+[config-server] [INFO] 
+[eureka-server] [INFO] -----------------------< com.idap:eureka-server >-----------------------
+[config-server] [INFO] -----------------------< com.idap:config-server >-----------------------
+[config-server] [INFO] Building IDAP Config Server 1.0.0-SNAPSHOT                         [5/6]
+[eureka-server] [INFO] Building IDAP Eureka Server 1.0.0-SNAPSHOT                         [4/6]
+[eureka-server] [INFO]   from eureka-server\pom.xml
+[config-server] [INFO]   from config-server\pom.xml
+[eureka-server] [INFO] --------------------------------[ jar ]---------------------------------
+[config-server] [INFO] --------------------------------[ jar ]---------------------------------
+[api-gateway] [INFO] 
+[api-gateway] [INFO] ------------------------< com.idap:api-gateway >------------------------
+[api-gateway] [INFO] Building IDAP API Gateway 1.0.0-SNAPSHOT                           [6/6]
+[api-gateway] [INFO]   from api-gateway\pom.xml
+[api-gateway] [INFO] --------------------------------[ jar ]---------------------------------
+[config-server] [INFO] 
+[config-server] [INFO] --- clean:3.3.2:clean (default-clean) @ config-server ---
+[config-server] [INFO] Deleting D:\Antigravity_Projects\Complete-Microservices-Architecture\config-server\target
+[config-server] [INFO] 
+[config-server] [INFO] --- resources:3.3.1:resources (default-resources) @ config-server ---
+[config-server] [INFO] Copying 1 resource from src\main\resources to target\classes
+[config-server] [INFO] Copying 0 resource from src\main\resources to target\classes
+[config-server] [INFO] 
+[config-server] [INFO] --- compiler:3.11.0:compile (default-compile) @ config-server ---
+[eureka-server] [INFO] 
+[eureka-server] [INFO] --- clean:3.3.2:clean (default-clean) @ eureka-server ---
+[eureka-server] [INFO] Deleting D:\Antigravity_Projects\Complete-Microservices-Architecture\eureka-server\target
+[eureka-server] [INFO] 
+[eureka-server] [INFO] --- resources:3.3.1:resources (default-resources) @ eureka-server ---
+[user-service] [INFO] 
+[user-service] [INFO] --- clean:3.3.2:clean (default-clean) @ user-service ---
+[user-service] [INFO] Deleting D:\Antigravity_Projects\Complete-Microservices-Architecture\user-service\target
+[eureka-server] [INFO] Copying 1 resource from src\main\resources to target\classes
+[eureka-server] [INFO] Copying 0 resource from src\main\resources to target\classes
+[eureka-server] [INFO] 
+[eureka-server] [INFO] --- compiler:3.11.0:compile (default-compile) @ eureka-server ---
+[user-service] [INFO] 
+[user-service] [INFO] --- resources:3.3.1:resources (default-resources) @ user-service ---
+[config-server] [INFO] Changes detected - recompiling the module! :source
+[config-server] [INFO] Compiling 2 source files with javac [debug release 21] to target\classes
+[user-service] [INFO] Copying 1 resource from src\main\resources to target\classes
+[user-service] [INFO] Copying 0 resource from src\main\resources to target\classes
+[user-service] [INFO] 
+[user-service] [INFO] --- compiler:3.11.0:compile (default-compile) @ user-service ---
+[eureka-server] [INFO] Changes detected - recompiling the module! :source
+[eureka-server] [INFO] Compiling 1 source file with javac [debug release 21] to target\classes
+[user-service] [INFO] Changes detected - recompiling the module! :source
+[user-service] [INFO] Compiling 16 source files with javac [debug release 21] to target\classes
+[api-gateway] [INFO] 
+[api-gateway] [INFO] --- clean:3.3.2:clean (default-clean) @ api-gateway ---
+[api-gateway] [INFO] Deleting D:\Antigravity_Projects\Complete-Microservices-Architecture\api-gateway\target
+[api-gateway] [INFO] 
+[api-gateway] [INFO] --- resources:3.3.1:resources (default-resources) @ api-gateway ---
+[api-gateway] [INFO] Copying 1 resource from src\main\resources to target\classes
+[api-gateway] [INFO] Copying 0 resource from src\main\resources to target\classes
+[api-gateway] [INFO] 
+[api-gateway] [INFO] --- compiler:3.11.0:compile (default-compile) @ api-gateway ---
+[api-gateway] [INFO] Changes detected - recompiling the module! :source
+[api-gateway] [INFO] Compiling 5 source files with javac [debug release 21] to target\classes
+[weather-service] [INFO] 
+[weather-service] [INFO] --- clean:3.3.2:clean (default-clean) @ weather-service ---
+[weather-service] [INFO] Deleting D:\Antigravity_Projects\Complete-Microservices-Architecture\weather-service\target
+[weather-service] [INFO] 
+[weather-service] [INFO] --- resources:3.3.1:resources (default-resources) @ weather-service ---
+[weather-service] [INFO] Copying 1 resource from src\main\resources to target\classes
+[weather-service] [INFO] Copying 0 resource from src\main\resources to target\classes
+[weather-service] [INFO] 
+[weather-service] [INFO] --- compiler:3.11.0:compile (default-compile) @ weather-service ---
+[weather-service] [INFO] Changes detected - recompiling the module! :source
+[weather-service] [INFO] Compiling 14 source files with javac [debug release 21] to target\classes
+[INFO] ------------------------------------------------------------------------
+[INFO] Average project wall time: 2.00s
+[INFO] Total concurrency: 26%
+[INFO] Bottleneck projects that decrease concurrency: (run build with -Dsmartbuilder.profiling=true for further details)
+[INFO] 	- com.idap:weather-service:1.0.0-SNAPSHOT
+[INFO] 	- com.idap:intelligent-data-aggregation-platform:1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Intelligent Data Aggregation Platform 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] Intelligent Data Aggregation Platform .............. SUCCESS [  0.014 s]
+[INFO] IDAP Config Server ................................. SUCCESS [  7.893 s]
+[INFO] IDAP Eureka Server ................................. SUCCESS [  7.619 s]
+[INFO] IDAP API Gateway ................................... SUCCESS [ 10.498 s]
+[INFO] IDAP User Service .................................. SUCCESS [ 11.035 s]
+[INFO] IDAP Weather Service ............................... SUCCESS [ 12.775 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  13.098 s (Wall Clock)
+[INFO] Finished at: 2025-12-23T21:21:01+05:30
+[INFO] ------------------------------------------------------------------------

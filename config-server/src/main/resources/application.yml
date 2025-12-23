@@ -1,0 +1,44 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  
+  # Security credentials for accessing config server
+  security:
+    user:
+      name: config_admin
+      password: config_secret_2024
+
+  cloud:
+    config:
+      server:
+        git:
+          # GitHub repository containing configuration files
+          uri: https://github.com/pdheeraj99/Intelligent-Data-Aggregation-Platform-Config-Server
+          default-label: main
+          clone-on-start: true
+          # Search paths within the repository
+          search-paths:
+            - '{application}'
+            - '{application}/{profile}'
+          # Timeout settings
+          timeout: 10
+          # Force pull on each request (useful during development)
+          force-pull: true
+
+# Actuator endpoints for health monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, refresh
+  endpoint:
+    health:
+      show-details: always
+
+# Logging
+logging:
+  level:
+    org.springframework.cloud.config: DEBUG

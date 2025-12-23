@@ -1,0 +1,90 @@
+spring:
+  application:
+    name: weather-service
+  
+  config:
+    import: optional:configserver:http://config_admin:config_secret_2024@localhost:8888
+
+  # PostgreSQL Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/idap_weather
+    username: idap_admin
+    password: idap_secret_2024
+    driver-class-name: org.postgresql.Driver
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: idap_redis_2024
+      timeout: 5000
+
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# Fallback configuration (used if Config Server is not available)
+server:
+  port: 8081
+
+# OpenWeatherMap API Configuration
+openweathermap:
+  api-key: ${OPENWEATHER_API_KEY:your-api-key-here}
+  base-url: https://api.openweathermap.org/data/2.5
+
+# Kafka Topics
+kafka:
+  topics:
+    weather-updated: weather.updated
+
+# Eureka Client Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Resilience4j Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      openweathermap:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 30s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, caches, metrics
+  endpoint:
+    health:
+      show-details: always
+
+# Logging
+logging:
+  level:
+    com.idap.weatherservice: DEBUG
+    org.springframework.cache: DEBUG

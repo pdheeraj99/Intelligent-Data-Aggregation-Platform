@@ -1,0 +1,142 @@
+spring:
+  application:
+    name: api-gateway
+  
+  config:
+    import: optional:configserver:http://config_admin:config_secret_2024@localhost:8888
+
+  # Redis configuration for rate limiting
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: idap_redis_2024
+
+  cloud:
+    gateway:
+      # Enable service discovery routing
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      # Route definitions
+      routes:
+        # User Service routes
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/**,/api/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: userServiceCB
+                fallbackUri: forward:/fallback/user-service
+
+        # Weather Service routes
+        - id: weather-service
+          uri: lb://weather-service
+          predicates:
+            - Path=/api/weather/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: weatherServiceCB
+                fallbackUri: forward:/fallback/weather-service
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+
+        # Financial Service routes (Phase 2)
+        - id: financial-service
+          uri: lb://financial-service
+          predicates:
+            - Path=/api/financial/**,/api/stocks/**,/api/crypto/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: financialServiceCB
+                fallbackUri: forward:/fallback/financial-service
+
+        # News Service routes (Phase 2)
+        - id: news-service
+          uri: lb://news-service
+          predicates:
+            - Path=/api/news/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: newsServiceCB
+                fallbackUri: forward:/fallback/news-service
+
+        # Analytics Service routes (Phase 2)
+        - id: analytics-service
+          uri: lb://analytics-service
+          predicates:
+            - Path=/api/analytics/**,/api/insights/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: analyticsServiceCB
+
+      # Global filters
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - AddResponseHeader=X-Response-Time, %{response_time}ms
+
+      # CORS configuration
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:3001"
+              - "http://localhost:3002"
+              - "http://localhost:3003"
+              - "http://localhost:3004"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+            maxAge: 3600
+
+# Fallback configuration (used if Config Server is not available)
+server:
+  port: 8080
+
+# JWT configuration (must match User Service)
+jwt:
+  secret: idap_jwt_secret_key_that_is_at_least_256_bits_long_for_hs256
+
+# Eureka client configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
+# Logging
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    com.idap.gateway: DEBUG

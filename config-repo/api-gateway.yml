@@ -1,0 +1,101 @@
+# API Gateway Configuration
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: idap_redis_2024
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/**,/api/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: userServiceCB
+                fallbackUri: forward:/fallback/user-service
+        
+        - id: weather-service
+          uri: lb://weather-service
+          predicates:
+            - Path=/api/weather/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: weatherServiceCB
+                fallbackUri: forward:/fallback/weather-service
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+        
+        - id: financial-service
+          uri: lb://financial-service
+          predicates:
+            - Path=/api/financial/**,/api/stocks/**,/api/crypto/**
+        
+        - id: news-service
+          uri: lb://news-service
+          predicates:
+            - Path=/api/news/**
+        
+        - id: analytics-service
+          uri: lb://analytics-service
+          predicates:
+            - Path=/api/analytics/**,/api/insights/**
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:3001"
+              - "http://localhost:3002"
+              - "http://localhost:3003"
+              - "http://localhost:3004"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+            maxAge: 3600
+
+# JWT Configuration
+jwt:
+  secret: idap_jwt_secret_key_that_is_at_least_256_bits_long_for_hs256
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
+  endpoint:
+    gateway:
+      enabled: true

@@ -1,0 +1,165 @@
+version: '3.8'
+
+services:
+  # ==================== DATABASES ====================
+  
+  postgres:
+    image: postgres:15
+    container_name: idap-postgres
+    environment:
+      POSTGRES_USER: idap_admin
+      POSTGRES_PASSWORD: idap_secret_2024
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U idap_admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - idap-network
+
+  mysql:
+    image: mysql:8
+    container_name: idap-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: idap_root_2024
+      MYSQL_USER: idap_admin
+      MYSQL_PASSWORD: idap_secret_2024
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-scripts/mysql-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pidap_root_2024"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - idap-network
+
+  mongodb:
+    image: mongo:7
+    container_name: idap-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: idap_admin
+      MONGO_INITDB_ROOT_PASSWORD: idap_secret_2024
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - idap-network
+
+  redis:
+    image: redis:7
+    container_name: idap-redis
+    command: redis-server --requirepass idap_redis_2024
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "idap_redis_2024", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - idap-network
+
+  # ==================== MESSAGING ====================
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: idap-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_log:/var/lib/zookeeper/log
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - idap-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: idap-kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - idap-network
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: idap-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: idap_admin
+      RABBITMQ_DEFAULT_PASS: idap_secret_2024
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - idap-network
+
+# ==================== VOLUMES ====================
+
+volumes:
+  postgres_data:
+  mysql_data:
+  mongodb_data:
+  redis_data:
+  zookeeper_data:
+  zookeeper_log:
+  kafka_data:
+  rabbitmq_data:
+
+# ==================== NETWORKS ====================
+
+networks:
+  idap-network:
+    driver: bridge
