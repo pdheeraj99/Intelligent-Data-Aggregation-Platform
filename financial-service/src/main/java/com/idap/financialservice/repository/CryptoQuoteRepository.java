@@ -12,11 +12,11 @@ import java.util.Optional;
 @Repository
 public interface CryptoQuoteRepository extends JpaRepository<CryptoQuote, Long> {
 
-    Optional<CryptoQuote> findTopBySymbolOrderByTimestampDesc(String symbol);
+    Optional<CryptoQuote> findTopBySymbolOrderByRecordedAtDesc(String symbol);
 
-    List<CryptoQuote> findBySymbolOrderByTimestampDesc(String symbol);
+    List<CryptoQuote> findBySymbolOrderByRecordedAtDesc(String symbol);
 
-    @Query("SELECT c FROM CryptoQuote c WHERE c.symbol = :symbol AND c.timestamp >= :since ORDER BY c.timestamp DESC")
+    @Query("SELECT c FROM CryptoQuote c WHERE c.symbol = :symbol AND c.recordedAt >= :since ORDER BY c.recordedAt DESC")
     List<CryptoQuote> findBySymbolSince(String symbol, LocalDateTime since);
 
     @Query("SELECT DISTINCT c.symbol FROM CryptoQuote c")

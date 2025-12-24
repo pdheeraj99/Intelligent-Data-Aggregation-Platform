@@ -46,11 +46,11 @@ public class FinancialService {
                 .lowPrice(response.getLowPrice())
                 .openPrice(response.getOpenPrice())
                 .previousClose(response.getPreviousClose())
-                .change(response.getChange())
+                .priceChange(response.getChange())
                 .percentChange(response.getPercentChange())
                 .volume(response.getVolume())
                 .exchange(response.getExchange())
-                .timestamp(LocalDateTime.now())
+                .recordedAt(LocalDateTime.now())
                 .build();
         stockQuoteRepository.save(entity);
 
@@ -76,7 +76,7 @@ public class FinancialService {
                 .percentChange24h(response.getPercentChange24h())
                 .volume24h(response.getVolume24h())
                 .marketCap(response.getMarketCap())
-                .timestamp(LocalDateTime.now())
+                .recordedAt(LocalDateTime.now())
                 .build();
         cryptoQuoteRepository.save(entity);
 
@@ -127,11 +127,11 @@ public class FinancialService {
                 .lowPrice(entity.getLowPrice())
                 .openPrice(entity.getOpenPrice())
                 .previousClose(entity.getPreviousClose())
-                .change(entity.getChange())
+                .change(entity.getPriceChange())
                 .percentChange(entity.getPercentChange())
                 .volume(entity.getVolume())
                 .exchange(entity.getExchange())
-                .timestamp(entity.getTimestamp())
+                .timestamp(entity.getRecordedAt())
                 .source("DATABASE")
                 .build();
     }
@@ -147,7 +147,7 @@ public class FinancialService {
                 .percentChange24h(entity.getPercentChange24h())
                 .volume24h(entity.getVolume24h())
                 .marketCap(entity.getMarketCap())
-                .timestamp(entity.getTimestamp())
+                .timestamp(entity.getRecordedAt())
                 .source("DATABASE")
                 .build();
     }

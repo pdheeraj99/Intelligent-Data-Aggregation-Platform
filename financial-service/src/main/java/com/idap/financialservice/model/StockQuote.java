@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "stock_quotes", indexes = {
     @Index(name = "idx_stock_symbol", columnList = "symbol"),
-    @Index(name = "idx_stock_timestamp", columnList = "timestamp")
+    @Index(name = "idx_stock_recorded_at", columnList = "recorded_at")
 })
 @Data
 @NoArgsConstructor
@@ -45,13 +45,13 @@ public class StockQuote {
     @Column(precision = 10, scale = 2)
     private BigDecimal percentChange;
 
-    @Column(precision = 12, scale = 4)
-    private BigDecimal change;
+    @Column(name = "price_change", precision = 12, scale = 4)
+    private BigDecimal priceChange;
 
     private Long volume;
 
-    @Column(nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "recorded_at", nullable = false)
+    private LocalDateTime recordedAt;
 
     @Column(length = 50)
     private String exchange;
@@ -61,8 +61,8 @@ public class StockQuote {
 
     @PrePersist
     protected void onCreate() {
-        if (timestamp == null) {
-            timestamp = LocalDateTime.now();
+        if (recordedAt == null) {
+            recordedAt = LocalDateTime.now();
         }
     }
 }

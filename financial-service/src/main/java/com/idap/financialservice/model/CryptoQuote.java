@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "crypto_quotes", indexes = {
     @Index(name = "idx_crypto_symbol", columnList = "symbol"),
-    @Index(name = "idx_crypto_timestamp", columnList = "timestamp")
+    @Index(name = "idx_crypto_recorded_at", columnList = "recorded_at")
 })
 @Data
 @NoArgsConstructor
@@ -51,13 +51,13 @@ public class CryptoQuote {
     @Column(precision = 24, scale = 2)
     private BigDecimal marketCap;
 
-    @Column(nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "recorded_at", nullable = false)
+    private LocalDateTime recordedAt;
 
     @PrePersist
     protected void onCreate() {
-        if (timestamp == null) {
-            timestamp = LocalDateTime.now();
+        if (recordedAt == null) {
+            recordedAt = LocalDateTime.now();
         }
     }
 }
