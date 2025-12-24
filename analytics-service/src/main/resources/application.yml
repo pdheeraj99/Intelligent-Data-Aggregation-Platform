@@ -7,7 +7,7 @@ spring:
 
   # PostgreSQL (for read model)
   datasource:
-    url: jdbc:postgresql://localhost:5432/idap_analytics?currentSchema=public
+    url: jdbc:postgresql://localhost:5432/idap_analytics?currentSchema=public&TimeZone=UTC
     username: idap_admin
     password: idap_secret_2024
     driver-class-name: org.postgresql.Driver
@@ -20,6 +20,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
 
   # Kafka Consumer Configuration
   kafka:

@@ -7,7 +7,7 @@ spring:
 
   # PostgreSQL
   datasource:
-    url: jdbc:postgresql://localhost:5432/idap_notifications?currentSchema=public
+    url: jdbc:postgresql://localhost:5432/idap_notifications?currentSchema=public&TimeZone=UTC
     username: idap_admin
     password: idap_secret_2024
     driver-class-name: org.postgresql.Driver
@@ -17,6 +17,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
 
   # RabbitMQ Configuration
   rabbitmq:
