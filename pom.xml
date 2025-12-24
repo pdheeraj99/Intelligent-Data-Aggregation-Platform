@@ -28,6 +28,11 @@
         <module>api-gateway</module>
         <module>user-service</module>
         <module>weather-service</module>
+        <!-- Phase 2 Modules -->
+        <module>financial-service</module>
+        <module>news-service</module>
+        <module>analytics-service</module>
+        <module>notification-service</module>
     </modules>
 
     <properties>

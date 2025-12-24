@@ -1,13 +1,13 @@
 spring:
   application:
-    name: user-service
-  
+    name: analytics-service
+
   config:
     import: optional:configserver:http://config_admin:config_secret_2024@localhost:8888
 
-  # PostgreSQL Database Configuration
+  # PostgreSQL (for read model)
   datasource:
-    url: jdbc:postgresql://localhost:5432/idap_users?currentSchema=public&stringtype=unspecified
+    url: jdbc:postgresql://localhost:5432/idap_analytics?currentSchema=public
     username: idap_admin
     password: idap_secret_2024
     driver-class-name: org.postgresql.Driver
@@ -16,22 +16,26 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-# Fallback configuration (used if Config Server is not available)
+  # Kafka Consumer Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: analytics-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
 server:
-  port: 8086
+  port: 8084
 
-# JWT Configuration
-jwt:
-  secret: idap_jwt_secret_key_that_is_at_least_256_bits_long_for_hs256
-  expiration: 86400000  # 24 hours in milliseconds
-
-# Eureka Client Configuration
+# Eureka Client
 eureka:
   client:
     service-url:
@@ -52,5 +56,5 @@ management:
 # Logging
 logging:
   level:
-    com.idap.userservice: DEBUG
-    org.springframework.security: DEBUG
+    com.idap.analyticsservice: DEBUG
+    org.springframework.kafka: INFO

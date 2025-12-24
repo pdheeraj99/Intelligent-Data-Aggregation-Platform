@@ -81,7 +81,10 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isOpenEndpoint(String path) {
-        return OPEN_ENDPOINTS.stream().anyMatch(path::startsWith);
+        // Check for direct path match (e.g., /api/auth/register)
+        // or service-prefixed path (e.g., /user-service/api/auth/register)
+        return OPEN_ENDPOINTS.stream().anyMatch(endpoint -> 
+                path.startsWith(endpoint) || path.contains(endpoint));
     }
 
     private Claims validateToken(String token) {

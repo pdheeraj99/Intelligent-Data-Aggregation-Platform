@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: financial-service
+
+  config:
+    import: optional:configserver:http://config_admin:config_secret_2024@localhost:8888
+
+  # MySQL Database Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3307/idap_financial?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: idap_admin
+    password: idap_secret_2024
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: idap_redis_2024
+
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+# Fallback configuration
+server:
+  port: 8082
+
+# Finnhub API Configuration
+finnhub:
+  api:
+    key: ${FINNHUB_API_KEY:demo}
+    base-url: https://finnhub.io/api/v1
+
+# Eureka Client Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+# Resilience4j Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      finnhub:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30000
+        permitted-number-of-calls-in-half-open-state: 3
+
+# Logging
+logging:
+  level:
+    com.idap.financialservice: DEBUG

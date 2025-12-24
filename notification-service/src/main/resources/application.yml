@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: notification-service
+
+  config:
+    import: optional:configserver:http://config_admin:config_secret_2024@localhost:8888
+
+  # PostgreSQL
+  datasource:
+    url: jdbc:postgresql://localhost:5432/idap_notifications?currentSchema=public
+    username: idap_admin
+    password: idap_secret_2024
+    driver-class-name: org.postgresql.Driver
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  # RabbitMQ Configuration
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: idap_admin
+    password: idap_secret_2024
+
+  # Mail Configuration (SendGrid)
+  mail:
+    host: ${SENDGRID_HOST:smtp.sendgrid.net}
+    port: ${SENDGRID_PORT:587}
+    username: ${SENDGRID_USERNAME:apikey}
+    password: ${SENDGRID_API_KEY:demo}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 8085
+
+# Notification settings
+notification:
+  email:
+    enabled: ${EMAIL_ENABLED:false}
+    from: ${EMAIL_FROM:noreply@idap.example.com}
+
+# Eureka Client
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+# Logging
+logging:
+  level:
+    com.idap.notificationservice: DEBUG

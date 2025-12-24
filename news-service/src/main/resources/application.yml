@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: news-service
+
+  config:
+    import: optional:configserver:http://config_admin:config_secret_2024@localhost:8888
+
+  # MongoDB Configuration
+  data:
+    mongodb:
+      uri: mongodb://idap_admin:idap_secret_2024@localhost:27017/idap_news?authSource=admin
+
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+# Fallback configuration
+server:
+  port: 8083
+
+# NewsAPI Configuration
+newsapi:
+  api:
+    key: ${NEWSAPI_KEY:demo}
+    base-url: https://newsapi.org/v2
+
+# Eureka Client Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+# Resilience4j Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      newsapi:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30000
+
+# Logging
+logging:
+  level:
+    com.idap.newsservice: DEBUG
